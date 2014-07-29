@@ -155,7 +155,7 @@ class EmbedYoutubeLiveStreaming
 </iframe>
 EOT;
 
-		return $this->embed_code;
+		return $this->embed_code[$ii];
 	}
 }
 
