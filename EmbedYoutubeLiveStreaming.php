@@ -111,7 +111,7 @@ class EmbedYoutubeLiveStreaming
 
 		$this->how_many_streams = count($this->objectResponse->items);
 
-		if($live_items > 0)
+		if($this->how_many_streams > 0)
 		{
 			$this->isLive = true;
 			return $this->how_many_streams;
