@@ -82,7 +82,7 @@ class EmbedYoutubeLiveStreaming
 		$this->objectResponse = json_decode($this->jsonResponse); // decode as object
 		$this->arrayResponse = json_decode($this->jsonResponse, TRUE); // decode as array
 
-		//$this->how_many_streams = $this->isLive();
+		$this->how_many_streams = $this->isLive();
 		if($this->isLive)
 		{
 			for($ii=0; $ii < $this->how_many_streams; $ii++)
