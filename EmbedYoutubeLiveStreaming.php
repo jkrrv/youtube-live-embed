@@ -10,7 +10,8 @@ class EmbedYoutubeLiveStreaming
 	public $arrayRespone; // response decoded as array
 
 	public $isLive; // true if there is a live streaming at the channel
-
+	public $how_many_streams; // show how many streams are live
+	
 	public $queryData; // query values as an array
 	public $getAddress; // address to request GET
 	public $getQuery; // data to request, encoded
@@ -81,20 +82,23 @@ class EmbedYoutubeLiveStreaming
 		$this->objectResponse = json_decode($this->jsonResponse); // decode as object
 		$this->arrayResponse = json_decode($this->jsonResponse, TRUE); // decode as array
 
-		$this->isLive();
+		$this->how_many_streams = $this->isLive();
 		if($this->isLive)
 		{
-			$this->live_video_id = $this->objectResponse->items[0]->id->videoId;
-			$this->live_video_title = $this->objectResponse->items[0]->snippet->title;
-			$this->live_video_description = $this->objectResponse->items[0]->snippet->description;
+			for($ii=0; $ii < $this->how_many_streams; $ii++)
+			{
+				$this->live_video_id[$ii] = $this->objectResponse->items[$ii]->id->videoId;
+				$this->live_video_title[$ii] = $this->objectResponse->items[$ii]->snippet->title;
+				$this->live_video_description[$ii] = $this->objectResponse->items[$ii]->snippet->description;
 
-			$this->live_video_published_at = $this->objectResponse->items[0]->snippet->publishedAt;
-			$this->live_video_thumb_default = $this->objectResponse->items[0]->snippet->thumbnails->default->url;
-			$this->live_video_thumb_medium = $this->objectResponse->items[0]->snippet->thumbnails->medium->url;
-			$this->live_video_thumb_high = $this->objectResponse->items[0]->snippet->thumbnails->high->url;
+				$this->live_video_published_at[$ii] = $this->objectResponse->items[$ii]->snippet->publishedAt;
+				$this->live_video_thumb_default[$ii] = $this->objectResponse->items[$ii]->snippet->thumbnails->default->url;
+				$this->live_video_thumb_medium[$ii] = $this->objectResponse->items[$ii]->snippet->thumbnails->medium->url;
+				$this->live_video_thumb_high[$ii] = $this->objectResponse->items[$ii]->snippet->thumbnails->high->url;
 
-			$this->channel_title = $this->objectResponse->items[0]->snippet->channelTitle;
-			$this->embedCode();
+				$this->channel_title = $this->objectResponse->items[$ii]->snippet->channelTitle;
+				$this->embedCode($ii);
+			}
 		}
 	}
 
@@ -105,12 +109,12 @@ class EmbedYoutubeLiveStreaming
 			$this->queryIt();
 		}
 
-		$live_items = count($this->objectResponse->items);
+		$this->how_many_streams = count($this->objectResponse->items);
 
-		if($live_items>0)
+		if($this->how_many_streams > 0)
 		{
 			$this->isLive = true;
-			return true;
+			return $this->how_many_streams;
 		}
 		else
 		{
@@ -137,21 +141,21 @@ class EmbedYoutubeLiveStreaming
 		if( $refill_code == true ) { $this->embedCode(); }
 	}
 
-	public function embedCode()
+	public function embedCode($ii = 0)
 	{
 		$autoplay = $this->embed_autoplay ? "?autoplay=1" : "";
 
-		$this->embed_code = <<<EOT
+		$this->embed_code[$ii] = <<<EOT
 <iframe
 	width="{$this->embed_width}"
 	height="{$this->embed_height}"
-	src="//www.youtube.com/embed/{$this->live_video_id}{$autoplay}"
+	src="//www.youtube.com/embed/{$this->live_video_id[$ii]}{$autoplay}"
 	frameborder="0"
 	allowfullscreen>
 </iframe>
 EOT;
 
-		return $this->embed_code;
+		return $this->embed_code[$ii];
 	}
 }
 
