@@ -1,0 +1,7 @@
+
+# composer stuff
+composer.lock
+vendor
+
+# test credentials
+tests/TestCredentials.php
