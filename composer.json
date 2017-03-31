@@ -1,0 +1,13 @@
+{
+    "name": "jkrrv/youtube-live-embed",
+    "description": "Find and embed Live YouTube videos for a given channel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "James Kurtz",
+            "email": "jkrrv@jkrrv.org"
+        }
+    ],
+    "require": {}
+}
