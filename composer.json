@@ -9,6 +9,23 @@
             "email": "jkrrv@jkrrv.org"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jkrrv/youtube-live-embed"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "jkrrv\\": "src/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            ".idea/",
+            "tests/TestCredentials.php"
+        ]
+    },
     "require": {},
     "require-dev": {
         "phpunit/phpunit": "5.6.*"
