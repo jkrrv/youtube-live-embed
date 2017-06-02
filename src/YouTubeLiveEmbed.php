@@ -15,6 +15,7 @@ class YouTubeLiveEmbed
 	protected $_videos = [];
 	protected $_fetched = false;
 
+	/** @var VideoOptions|null $defaultVideoOptions */
 	public static $defaultVideoOptions = null;
 	public $videoOptions;
 

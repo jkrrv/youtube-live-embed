@@ -130,4 +130,22 @@ class Video
 		}
 	}
 
+
+	/**
+	 * Provides the src iframe URL.  Useful if, for instance, the url will be passed to a front-end script to apply.
+	 *
+	 * @param array|VideoOptions $options
+	 * @return null|string
+	 */
+	public function embedUrl($options = []) {
+		if (count($options) > 0 && $options != $this->options) { // if the options are getting changed, clone them so changes aren't back-washed.
+			$opts = clone $this->options;
+			$opts->merge($options);
+		} else {
+			$opts = &$this->options;
+		}
+
+		return $opts->getHttps() . "//www.youtube.com/embed/" . $this->id . $opts->getParamString();
+	}
+
 }

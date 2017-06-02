@@ -47,11 +47,31 @@ class YouTubeLiveEmbedTests extends TestCase {
 		$this->assertEquals($expected, $embedCode);
 	}
 
+	public function test_videoEmbedCodeReturnInheritOptions() {
+		$opts = self::$videos[0]->options;
+		$expected = "<iframe width=\"" . $opts->width . "\" height=\"" . $opts->height . "\" src=\"//www.youtube.com/embed/" . self::$videos[0]->id . $opts->getParamString() . "\" frameborder=\"0\" allowfullscreen></iframe>";
+		$embedCode = self::$videos[0]->embedCode(false, []);
+		$this->assertEquals($expected, $embedCode);
+	}
+
 	public function test_videoEmbedCodeEcho() {
 		$opts = new YouTubeLiveEmbed\VideoOptions();
 		$expected = "<iframe width=\"" . $opts->width . "\" height=\"" . $opts->height . "\" src=\"//www.youtube.com/embed/" . self::$videos[0]->id . "\" frameborder=\"0\" allowfullscreen></iframe>";
 		$this->expectOutputString($expected);
 		self::$videos[0]->embedCode(true, $opts);
+	}
+
+	public function test_videoEmbedUrlReturn() {
+		$opts = new YouTubeLiveEmbed\VideoOptions();
+		$expected = "//www.youtube.com/embed/" . self::$videos[0]->id;
+		$embedCode = self::$videos[0]->embedUrl($opts);
+		$this->assertEquals($expected, $embedCode);
+	}
+
+	public function test_videoEmbedUrlReturnInheritOptions() {
+		$expected = "//www.youtube.com/embed/" . self::$videos[0]->id . self::$videos[0]->options->getParamString();
+		$embedCode = self::$videos[0]->embedUrl([]);
+		$this->assertEquals($expected, $embedCode);
 	}
 
 }
