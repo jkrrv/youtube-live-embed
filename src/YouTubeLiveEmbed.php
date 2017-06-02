@@ -4,6 +4,7 @@ namespace jkrrv;
 
 use jkrrv\YouTubeLiveEmbed\Video;
 use jkrrv\YouTubeLiveEmbed\VideoOptions;
+use GuzzleHttp\Client;
 
 class YouTubeLiveEmbed
 {
@@ -14,6 +15,9 @@ class YouTubeLiveEmbed
 
 	protected $_videos = [];
 	protected $_fetched = false;
+
+	/** @var Client|null $guzzleClient */
+	public $guzzleClient = null;
 
 	/** @var VideoOptions|null $defaultVideoOptions */
 	public static $defaultVideoOptions = null;
@@ -29,6 +33,9 @@ class YouTubeLiveEmbed
 		$this->part = "id,snippet";
 		$this->eventType = "live";
 		$this->type = "video";
+
+		// Initialize the Guzzle Client, since it's realistic to think we'll need it eventually.
+		$this->guzzleClient = new Client();
 	}
 
 	/**
@@ -41,6 +48,9 @@ class YouTubeLiveEmbed
 		self::$_apiKey = $apiKey;
 	}
 
+	/**
+	 *  Load data from YouTube.
+	 */
 	private function query()
 	{
 		$queryString = [
@@ -53,7 +63,8 @@ class YouTubeLiveEmbed
 		];
 		$queryString = self::$getAddress . http_build_query($queryString);
 
-		$response = json_decode(file_get_contents($queryString), true, 7); // decode as associative array
+		$res = $this->guzzleClient->request("GET", $queryString); // submit the API request
+		$response = json_decode($res->getBody(), true, 7); // decode as associative array
 
 		foreach($response['items'] as $item) {
 			if ($item['id']['kind'] == "youtube#video") {
